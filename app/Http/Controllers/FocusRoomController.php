@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\FocusRoom;
@@ -25,18 +26,21 @@ class FocusRoomController extends Controller
             'youtube_url' => 'nullable|url',
         ]);
 
+        $user = $request->user();
+
         FocusRoom::create([
             'name' => $request->name,
             'music_type' => $request->music_type,
             'youtube_url' => $request->youtube_url,
-            'created_by' => auth()->id(),
+            'created_by' => $user->id,
         ]);
 
         return redirect()->route('rooms.index')->with('success', 'Room berhasil dibuat!');
     }
 
-    public function show(FocusRoom $room)
+    public function show($id)
     {
+        $room = FocusRoom::findOrFail($id);
         return view('rooms.show', compact('room'));
     }
 }
