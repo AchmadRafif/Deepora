@@ -6,7 +6,7 @@ Deepora adalah platform belajar berbasis web yang menggabungkan teknik **Pomodor
 
 ---
 
- 🚀 Features
+ ## 🚀 Features
 
  ⏱ Pomodoro Timer
 - Focus session & break session otomatis (25 min focus → 5 min break → 15 min long break)
