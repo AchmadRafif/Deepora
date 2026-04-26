@@ -1,4 +1,4 @@
- ✦ Deepora — Social Pomodoro & Deep Work Hub
+# ✦ Deepora — Social Pomodoro & Deep Work Hub
 
 > Belajar lebih fokus, lebih seru, dan tidak sendirian.
 
@@ -6,22 +6,22 @@ Deepora adalah platform belajar berbasis web yang menggabungkan teknik **Pomodor
 
 ---
 
- ## 🚀 Features
+## 🚀 Features
 
- ⏱ Pomodoro Timer
+### ⏱ Pomodoro Timer
 - Focus session & break session otomatis (25 min focus → 5 min break → 15 min long break)
 - Dot indicator untuk tracking sesi ke berapa
 - Timer **persistent** — tidak reset saat pindah halaman
 - Auto-start sesi berikutnya
 
- 🎧 Focus Room
+### 🎧 Focus Room
 - Buat & join room belajar virtual bersama teman
 - Playlist Lo-fi bawaan (Lo-fi, Jazz, Nature, Classical)
 - Custom YouTube URL untuk musik pilihan sendiri
 - Timer Pomodoro tersinkronisasi di tiap room
 - 💬 **Live Chat** di dalam room (auto-refresh setiap 3 detik)
 
-🎮 Gamification System
+### 🎮 Gamification System
 - **XP** (Experience Points) setiap menyelesaikan sesi fokus
 - **Level** naik otomatis setiap 100 XP
 - **Badge** berdasarkan total XP:
@@ -39,12 +39,12 @@ Deepora adalah platform belajar berbasis web yang menggabungkan teknik **Pomodor
   - Lv.20 → 🌌 Galaxy
   - Lv.30 → 👑 Legendary
 
- 🏆 Leaderboard
+### 🏆 Leaderboard
 - Ranking berdasarkan total XP
 - Tampil nama, badge, level, dan avatar
 - Top 20 pengguna paling produktif
 
- 👤 User Profile
+### 👤 User Profile
 - Edit nama, sekolah, warna avatar
 - Pilih avatar style yang sudah di-unlock
 - Statistik belajar:
@@ -55,7 +55,7 @@ Deepora adalah platform belajar berbasis web yang menggabungkan teknik **Pomodor
 
 ---
 
- 🛠 Tech Stack
+## 🛠 Tech Stack
 
 | Layer | Teknologi |
 |-------|-----------|
@@ -69,9 +69,9 @@ Deepora adalah platform belajar berbasis web yang menggabungkan teknik **Pomodor
 
 ---
 
- 📦 Installation
+## 📦 Installation
 
- Requirements
+### Requirements
 - PHP >= 8.2
 - Composer
 - Node.js & NPM
@@ -81,30 +81,30 @@ Deepora adalah platform belajar berbasis web yang menggabungkan teknik **Pomodor
 ### Steps
 
 ```bash
- 1. Clone repository
+# 1. Clone repository
 git clone https://github.com/username/deepora.git
 cd deepora
 
- 2. Install dependencies
+# 2. Install dependencies
 composer install
 npm install
 
- 3. Setup environment
+# 3. Setup environment
 cp .env.example .env
 php artisan key:generate
 
- 4. Konfigurasi database di .env
+# 4. Konfigurasi database di .env
 DB_DATABASE=deepora
 DB_USERNAME=root
 DB_PASSWORD=
 
- 5. Jalankan migration
+# 5. Jalankan migration
 php artisan migrate
 
- 6. Build assets
+# 6. Build assets
 npm run build
 
- 7. Jalankan server
+# 7. Jalankan server
 php artisan serve
 ```
 
@@ -112,7 +112,7 @@ Buka `http://localhost:8000` di browser.
 
 ---
 
- 📸 Preview
+## 📸 Preview
 
 | Halaman | Deskripsi |
 |---------|-----------|
@@ -124,7 +124,7 @@ Buka `http://localhost:8000` di browser.
 
 ---
 
- 🤝 Contributing
+## 🤝 Contributing
 
 Pull request sangat terbuka! Silakan fork repo ini dan kembangkan ideamu.
 
@@ -136,13 +136,13 @@ Pull request sangat terbuka! Silakan fork repo ini dan kembangkan ideamu.
 
 ---
 
- 📌 Notes
+## 📌 Notes
 
 Project ini dibuat sebagai bagian dari pembelajaran dan pengembangan portofolio di bidang web development.
 
 ---
 
- ⭐ Support
+## ⭐ Support
 
 Kalau kamu suka project ini, jangan lupa kasih ⭐ di repository ya!
 
