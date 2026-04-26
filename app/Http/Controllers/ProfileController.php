@@ -2,59 +2,92 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Models\PomodoroSession;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function index(Request $request)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
-    }
+        $user = $request->user();
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+        // Total statistik
+        $totalSessions = PomodoroSession::where('user_id', $user->id)
+            ->where('completed', true)
+            ->count();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $totalMinutes = PomodoroSession::where('user_id', $user->id)
+            ->where('completed', true)
+            ->sum('duration');
+
+        $totalHours = round($totalMinutes / 60, 1);
+
+        // Sesi minggu ini
+        $weeklySessions = PomodoroSession::where('user_id', $user->id)
+            ->where('completed', true)
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->count();
+
+        $weeklyMinutes = PomodoroSession::where('user_id', $user->id)
+            ->where('completed', true)
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->sum('duration');
+
+        // Sesi 7 hari terakhir (untuk grafik)
+        $dailyStats = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $minutes = PomodoroSession::where('user_id', $user->id)
+                ->where('completed', true)
+                ->whereDate('created_at', $date->toDateString())
+                ->sum('duration');
+            $dailyStats[] = [
+                'day' => $date->format('D'),
+                'minutes' => $minutes
+            ];
         }
 
-        $request->user()->save();
+        // XP untuk level berikutnya
+        $xpForNextLevel = ($user->level * 100);
+        $xpProgress = $user->xp % 100;
+        $xpProgressPercent = ($xpProgress / 100) * 100;
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return view('profile', compact(
+            'user',
+            'totalSessions',
+            'totalMinutes',
+            'totalHours',
+            'weeklySessions',
+            'weeklyMinutes',
+            'dailyStats',
+            'xpForNextLevel',
+            'xpProgress',
+            'xpProgressPercent'
+        ));
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'school' => 'nullable|string|max:100',
+            'avatar_color' => 'required|string',
+            'avatar_style' => 'nullable|string',
         ]);
 
         $user = $request->user();
+        $user->name = $request->name;
+        $user->school = $request->school;
+        $user->avatar_color = $request->avatar_color;
 
-        Auth::logout();
+        // Validasi avatar style sesuai level
+        $unlockedIds = array_column($user->getUnlockedAvatars(), 'id');
+        if (in_array($request->avatar_style, $unlockedIds)) {
+            $user->avatar_style = $request->avatar_style;
+        }
 
-        $user->delete();
+        $user->save();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return redirect()->route('profile')->with('success', 'Profil berhasil diupdate!');
     }
 }

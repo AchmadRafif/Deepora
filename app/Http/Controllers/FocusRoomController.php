@@ -22,16 +22,22 @@ class FocusRoomController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:50',
-            'music_type' => 'required|in:lofi,jazz,nature',
-            'youtube_url' => 'nullable|url',
+            'music_type' => 'required|in:lofi,jazz,nature,classical,custom',
+            'youtube_url' => 'nullable|string',
+            'preset_url' => 'nullable|string',
         ]);
 
         $user = $request->user();
 
+        // Pakai custom URL kalau ada, kalau tidak pakai preset
+        $youtubeUrl = $request->music_type === 'custom'
+            ? $request->youtube_url
+            : $request->preset_url;
+
         FocusRoom::create([
             'name' => $request->name,
             'music_type' => $request->music_type,
-            'youtube_url' => $request->youtube_url,
+            'youtube_url' => $youtubeUrl,
             'created_by' => $user->id,
         ]);
 
@@ -42,5 +48,17 @@ class FocusRoomController extends Controller
     {
         $room = FocusRoom::findOrFail($id);
         return view('rooms.show', compact('room'));
+    }
+
+    public function destroy(Request $request, FocusRoom $room)
+    {
+        if ($request->user()->id !== $room->created_by) {
+            return redirect()->route('rooms.index')->with('error', 'Kamu tidak bisa menghapus room ini!');
+        }
+
+        $room->sessions()->delete();
+        $room->delete();
+
+        return redirect()->route('rooms.index')->with('success', 'Room berhasil dihapus!');
     }
 }
